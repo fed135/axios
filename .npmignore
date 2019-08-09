@@ -12,6 +12,7 @@ COLLABORATOR_GUIDE.md
 CONTRIBUTING.md
 COOKBOOK.md
 ECOSYSTEM.md
+UPGRADE_GUIDE.md
 Gruntfile.js
 karma.conf.js
 webpack.*.js
