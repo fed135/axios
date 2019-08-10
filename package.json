@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/axios/axios",
   "devDependencies": {
+    "@ungap/url-search-params": "^0.1.2",
     "bundlesize": "^0.18.0",
     "coveralls": "^3.0.6",
     "es6-promise": "^4.2.8",
@@ -64,7 +65,6 @@
     "mocha": "^6.2.0",
     "sinon": "^7.4.1",
     "typescript": "^3.5.3",
-    "url-search-params": "^1.1.0",
     "webpack": "^4.39.1",
     "webpack-dev-server": "^3.8.0"
   },

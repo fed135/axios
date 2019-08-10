@@ -1,5 +1,5 @@
 var buildURL = require('../../../lib/helpers/buildURL');
-var URLSearchParams = require('url-search-params');
+var URLSearchParams = require('@ungap/url-search-params/cjs');
 
 describe('helpers::buildURL', function () {
   it('should support null params', function () {
