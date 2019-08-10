@@ -11,10 +11,12 @@ describe('static api', function () {
   });
 
   it('should have promise method helpers', function () {
-    var promise = axios();
+    var promise = axios('/foo')
 
     expect(typeof promise.then).toEqual('function');
     expect(typeof promise.catch).toEqual('function');
+    // Handle 404 rejection so browser wouldn't throw `unhandledrejection` (see cancel.spec.js)
+    promise.catch(function() {})
   });
 
   it('should have defaults', function () {

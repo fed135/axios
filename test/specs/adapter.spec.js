@@ -7,6 +7,7 @@ describe('adapter', function () {
     axios('/foo', {
       adapter: function (config) {
         called = true;
+        return new Promise(function() {})
       }
     });
 
