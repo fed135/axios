@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 var url = require('url');
 var path = require('path');
@@ -14,12 +16,13 @@ function pipeFileToResponse(res, file, type) {
   fs.createReadStream(path.join(__dirname, file)).pipe(res);
 }
 
-server = http.createServer(function (req, res) {
+server = http.createServer(function serverHandler(req, res) {
   req.setEncoding('utf8');
 
   var parsed = url.parse(req.url, true);
   var pathname = parsed.pathname;
 
+  // eslint-disable-next-line no-console
   console.log('[' + new Date() + ']', req.method, pathname);
 
   if (pathname === '/') {
@@ -37,11 +40,11 @@ server = http.createServer(function (req, res) {
     var result;
     var data = '';
 
-    req.on('data', function (chunk) {
+    req.on('data', function dataHandler(chunk) {
       data += chunk;
     });
 
-    req.on('end', function () {
+    req.on('end', function endHandler() {
       try {
         status = 200;
         result = {
@@ -51,11 +54,12 @@ server = http.createServer(function (req, res) {
           headers: req.headers
         };
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error('Error:', e.message);
         status = 400;
         result = {
-           error: e.message
-         };
+          error: e.message
+        };
       }
 
       res.writeHead(status, {
@@ -69,4 +73,12 @@ server = http.createServer(function (req, res) {
   }
 });
 
-server.listen(3000);
+var PORT = 3000;
+server.listen(PORT, function serverListenCallback(error) {
+  if (error) {
+    throw error;
+  }
+
+  // eslint-disable-next-line no-console
+  console.log('Listening on localhost:' + PORT);
+});
