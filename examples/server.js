@@ -1,5 +1,6 @@
+'use strict';
+
 var fs = require('fs');
-var url = require('url');
 var path = require('path');
 var http = require('http');
 var argv = require('minimist')(process.argv.slice(2));
@@ -8,23 +9,23 @@ var dirs;
 
 function listDirs(root) {
   var files = fs.readdirSync(root);
-  var dirs = [];
+  var directories = [];
 
-  for (var i=0, l=files.length; i<l; i++) {
+  for (var i = 0, l = files.length; i < l; i++) {
     var file = files[i];
     if (file[0] !== '.') {
       var stat = fs.statSync(path.join(root, file));
       if (stat.isDirectory()) {
-        dirs.push(file);
+        directories.push(file);
       }
     }
   }
 
-  return dirs;
+  return directories;
 }
 
 function getIndexTemplate() {
-  var links = dirs.map(function (dir) {
+  var links = dirs.map(function dirLink(dir) {
     var url = '/' + dir;
     return '<li onclick="document.location=\'' + url + '\'"><a href="' + url + '">' + url + '</a></li>';
   });
@@ -74,7 +75,7 @@ function pipeFileToResponse(res, file, type) {
 
 dirs = listDirs(__dirname);
 
-server = http.createServer(function (req, res) {
+server = http.createServer(function serverHandler(req, res) {
   var url = req.url;
 
   // Process axios itself
@@ -105,7 +106,7 @@ server = http.createServer(function (req, res) {
   if (/\/$/.test(url)) {
     url += 'index.html';
   }
-  
+
   // Format request /get -> /get/index.html
   var parts = url.split('/');
   if (dirs.indexOf(parts[parts.length - 1]) > -1) {
@@ -119,19 +120,23 @@ server = http.createServer(function (req, res) {
     } else {
       send404(res);
     }
-  }
-
-  // Process server request
-  else if (new RegExp('(' + dirs.join('|') + ')\/server').test(url)) {
+  } else if (new RegExp('(' + dirs.join('|') + ')\/server').test(url)) { // Process server request
     if (fs.existsSync(path.join(__dirname, url + '.js'))) {
       require(path.join(__dirname, url + '.js'))(req, res);
     } else {
       send404(res);
     }
-  }
-  else {
+  } else {
     send404(res);
   }
 });
 
-server.listen(argv.p || 3000);
+var PORT = argv.p || 3000;
+server.listen(PORT, function serverListenCallback(error) {
+  if (error) {
+    throw error;
+  }
+
+  // eslint-disable-next-line no-console
+  console.log('Listening on localhost:' + PORT);
+});
