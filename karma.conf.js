@@ -192,6 +192,7 @@ module.exports = function(config) {
 
     // Webpack config
     webpack: {
+      mode: 'development',
       cache: true,
       devtool: 'inline-source-map',
       // Disable code coverage, as it's breaking CI

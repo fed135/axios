@@ -1,16 +1,20 @@
+'use strict';
 var webpack = require('webpack');
 var config = {};
 
 function generateConfig(name) {
   var uglify = name.indexOf('min') > -1;
-  var config = {
+  var webpackConfig = {
     entry: './index.js',
+    mode: 'production',
     output: {
-      path: 'dist/',
       filename: name + '.js',
       sourceMapFilename: name + '.map',
       library: 'axios',
       libraryTarget: 'umd'
+    },
+    optimization: {
+      minimize: uglify
     },
     node: {
       process: false
@@ -18,26 +22,16 @@ function generateConfig(name) {
     devtool: 'source-map'
   };
 
-  config.plugins = [
+  webpackConfig.plugins = [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     })
   ];
 
-  if (uglify) {
-    config.plugins.push(
-      new webpack.optimize.UglifyJsPlugin({
-        compressor: {
-          warnings: false
-        }
-      })
-    );
-  }
-
-  return config;
+  return webpackConfig;
 }
 
-['axios', 'axios.min'].forEach(function (key) {
+['axios', 'axios.min'].forEach(function loop(key) {
   config[key] = generateConfig(key);
 });
 

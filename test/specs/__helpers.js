@@ -2,7 +2,7 @@
 require('es6-promise').polyfill();
 
 // Polyfill URLSearchParams
-URLSearchParams = require('url-search-params');
+URLSearchParams = require('@ungap/url-search-params/cjs');
 
 // Import axios
 axios = require('../../index');

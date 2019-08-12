@@ -71,7 +71,8 @@ describe('cancel', function() {
       axios.get('/foo', {
         cancelToken: source.token
       }).then(function () {
-        window.addEventListener('unhandledrejection', function () {
+        window.addEventListener('unhandledrejection', function (event) {
+          console.log(event);
           done.fail('Unhandled rejection.');
         });
         source.cancel();
